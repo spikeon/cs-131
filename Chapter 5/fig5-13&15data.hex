@@ -1,0 +1,29 @@
+; File: 	fig5-13&15data.hex
+; Description:	Data file for fig5-13.asm and fig5-15.asm
+;
+; Author:	Carl Reinwald
+; Project:	CS 131 Chapter 5 Figure 5-13 and 5-15
+; Version:	0.2
+; Date:		2015-10-10
+;
+; Log:		
+;	V0.2  2015-10-10
+;	Updated file to support both Fig 5-13 and 5-15
+;
+;	V0.1  2015-10-02
+;	Initial Release
+;
+3100	; data starts at memory location x3100
+3107 	; the numbers to add begins here
+2819
+0110
+0310
+0110
+1110
+11B1
+0019
+0007
+0529
+0107
+0004	; total is x8765
+0000	; sentinal is 0 (used for fig 5-15)
