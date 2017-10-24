@@ -1,15 +1,26 @@
 ; File:		bitshift.asm
+; Description:	Shift a bit pattern to the left by n bits
+;
 ; Author:	Mike Flynn
-; Description:	Shift a bit pattern to the left
-
-; Add the value to itself x number of times, where x is the number of times to shift
-
-; Register Usage
-;	R0 = temp
-;	R1 = Bit Value Location
-;	R2 = Shift Value Location
-;	R3 = Result Location
-;	R4 = Counter
+; Project	CS 131 Assignment 5
+; Date:		10/23/2017
+; 
+; Operational Conditions:
+; 
+; 	x301A : Starting Bit Pattern
+; 	x301B : Left Shift Value
+; 	x301C : Result
+; 
+; 	The shift value may be any number between 0 and 16 inclusive.
+; 	Note: No range checking is performed on the shift value
+; 
+; Resource Usage:
+;
+;	R0 : temp
+;	R1 : Bit Value Location
+;	R2 : Shift Value Location
+;	R3 : Result Location
+;	R4 : Counter
 
 	.ORIG x3000	; Start at x3000
 
@@ -25,7 +36,7 @@
 	ADD R4,R4,#-1	; Decrease Counter
 	BRnzp -4
 	
-	STR R0,R3,#0
+	STR R0,R3,#0	; Store the value in R0 into the location at R3
 
-	HALT
+	HALT		; End the program
 	.END
