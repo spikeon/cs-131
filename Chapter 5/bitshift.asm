@@ -30,11 +30,12 @@
 
 	LDR R0,R1,#0	; Load Bit Value to R0
 	LDR R4,R2,#0	; Load Counter
-	
-	BRz 3
+			
+			; Start Loop
+	BRz 3		; Skip next three lines when counter reaches zero
 	ADD R0,R0,R0	; Add R0 to R0 and store in R0
 	ADD R4,R4,#-1	; Decrease Counter
-	BRnzp -4
+	BRnzp -4	; Return to beginning of loop
 	
 	STR R0,R3,#0	; Store the value in R0 into the location at R3
 
