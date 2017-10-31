@@ -1,0 +1,13 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	AFFIX                   3040
+//	BUFF                    3044
+//	CLEAN                   301A
+//	CLEANEND                301E
+//	INNER                   300A
+//	INNEREND                3011
+//	OUTERLOOP               3001
+//	PROMPT                  3025
+//	RESET                   3003
+//	RESPON                  3034
+//	SIZE                    3024
