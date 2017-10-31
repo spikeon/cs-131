@@ -1,0 +1,83 @@
+; File: 	fig7-2data.hex
+; Description:	Example Data file for fig7-2.bin
+;
+; Author:	Carl Reinwald
+; Project:	CS 131 Chapter 7 Figure 7-2
+; Version:	0.1
+; Date:		2015-10-10
+;
+; Log:		
+;	V0.1  2015-10-10
+;	Initial Release
+;
+; Each word represents an ASCII character (in hex)
+; Sentinel is the ASCII EOT (ASCII code 0x04)
+;
+; The text is:
+;   Now is the time for all good programmers to go to Comic-Con.
+;
+; Question:  Why does the program output a ":" when counting
+;            the number of o's?
+;
+4000	; data starts at memory location x4000
+004E 	; the text begins here
+006F
+0077
+0020
+0069
+0073
+0020
+0074
+0068
+0065
+0020
+0074
+0069
+006D
+0065
+0020
+0066
+006F
+0072
+0020
+0061
+006C
+006C
+0020
+0067
+006F
+006F
+0064
+0020
+0070
+0072
+006F
+0067
+0072
+0061
+006D
+006D
+0065
+0072
+0073
+0020
+0074
+006F
+0020
+0067
+006F
+0020
+0074
+006F
+0020
+0043
+006F
+006D
+0069
+0063
+002D
+0043
+006F
+006E
+002E
+0004	; sentinal is ASCII EOT
