@@ -18,6 +18,7 @@
 ; R2: Blank
 ; R3: Loop Iterator
 ; R4: Newline Check
+; R5: Character Counter
 ; 
 ; -----------------------------------------------------------------------------------------
 ; Notes
@@ -43,77 +44,74 @@
 ; Code
 ; -----------------------------------------------------------------------------------------
 
-	.ORIG x3000				; Start at x3000
-	AND R2, R2, #0				; Make sure R2 is empty
+	.ORIG x3000				; Begin Program at x3000
+	AND R2, R2, #0				; Make absolutely sure R2 is empty
 
-OUTERLOOP					; Start Outer Loop
-	
-	LEA R1, BUFF				; Load Buffer
-	LEA R3, SIZE				; Load Size
+MAIN						; Load Values	
+	LEA R1, BUFFER				; - Load Buffer
+	LEA R3, SIZE				; - Load Size
 
-RESET						; Clear the String in the Buffer
+RESET						; Reset Buffer
+	STR R2, R1, #0 				; - Set current location to null
+	ADD R1, R1, #1 				; - Increment location
+	ADD R3, R3, #-1				; - Decrement size 
+	BRzp RESET 
+						; Display Prompt
+	LEA R0, PROMPT				; - Load Prompt 
+	PUTS					; - Output Prompt
+	LEA R1, BUFFER				
+						; Get User Input
+	AND R5, R5, #0				; - Set Character Counter to zero
+USERINPUT					
+	GETC					; - Load character from keyboard
+	ADD R4, R0, #-10			; - Excape loop on newline
+	BRz RESPONSE				 
+						; - Validate Input
+	ADD R4, R0, #-8				; -- Ignore backspace
+	BRz USERINPUT				 
+	ADD R4, R5, #-10			; -- Only allow 20 characters
+	ADD R4, R4, #-10			
+	BRzp USERINPUT
+	PUTC					; - Display value on the screen
+	STR R0, R1, #0				; - Store character in buffer
+	ADD R1, R1, #1				; - Increment buffer index
+	ADD R5, R5, #1				; - Increment Character Counter
+	BRnzp USERINPUT				
+RESPONSE					; Display Response Prefix
+	PUTC					; - Display Last Character ( always enter )
+	LEA R0, RESPON				; - Load Response Prefix
+	PUTS					; - Output Response Prefix
 
-	STR R2, R1, #0 				; Empty location at R1
-	ADD R1, R1, #1 				; Increment Location
-	ADD R3, R3, #-1				; Decrement Size 
-	BRzp RESET				; Loop 
+						; Display all but the first character
+	LEA R0, BUFFER				; - Load Buffer into output
+	ADD R0, R0, #1				; - Change Buffer Index to 1
+	PUTS					; - Output rest of Buffer
 
-	LEA R0, PROMPT				; Load Prompt ( English Word )
-	PUTS					; Output Prompt
+						; Forget all but the first character
+	LEA R1, BUFFER				; - Load Buffer for modification
+	STR R2, R1, #1 				; - Set Second Character to 0
 
-	LEA R1, BUFF				; Buffer has changed, Reload Buffer
+						; Display the first character
+	LEA R0, BUFFER				; - Load Buffer Into Output Register
+	PUTS					; - Output Buffer
 
-INNER						; Loop to get input
+						; Display Response Affix
+	LEA R0, AFFIX				; - Load Response Affix
+	PUTS					; - Output Response Affix
 
-	GETC					; Get Input
-	PUTC					; Show the user what they typed
-	ADD R4, R0, #-10			; Check for newline
-	BRz INNEREND				; Escape if newline
-	STR R0, R1, #0				; Store in buffer
-	ADD R1, R1, #1				; Change buffer index
-	BRnzp	INNER				; Loop
+BRnzp	MAIN					
 
-INNEREND					; Excape Hatch
-
-	LEA R0, RESPON				; Load Response Prefix ( Pig-Latin: )
-	PUTS					; Output Response Prefix
-
-	LEA R0, BUFF				; Load Buffer into output
-	ADD R0, R0, #1				; Change Buffer Index to 1
-	PUTS					; Output rest of Buffer
-
-	LEA R1, BUFF				; Load Buffer for modification
-	LEA R3, SIZE				; Load Buffer Size
-	ADD R1, R1, #1				; Change Buffer Index to 1
-	ADD R3, R3, #-1				; Change Buffer Size to 19
-
-CLEAN						; Begin Clean 
-
-	STR R2, R1, #0 				; Empty location at R1
-	ADD R1, R1, #1 				; Increment Location
-	ADD R3, R3, #-1				; Decrement Size
-	BRzp CLEAN				; Loop
-
-CLEANEND
-
-	LEA R0, BUFF				; Load Buffer Into Output
-	PUTS					; Output Buffer
-
-	LEA R0, AFFIX				; Load Response Affix ( ay\n )
-	PUTS					; Output Response Affix
-
-BRnzp	OUTERLOOP				; Begin Again
-	
-	HALT					; Stop my program
+	HALT
 
 ; -----------------------------------------------------------------------------------------
 ; Variables
 ; -----------------------------------------------------------------------------------------
 
-SIZE	.FILL		20			; Buffer Size
 PROMPT	.STRINGZ	"English Word: "	; Input Prompt
 RESPON	.STRINGZ	"Pig-Latin: "		; Response Prefix
 AFFIX	.STRINGZ	"ay\n"			; Response Affix
-BUFF	.BLKW		20			; Buffer
+
+SIZE	.FILL		20			; Buffer Size
+BUFFER	.BLKW		20			; Input Buffer
 
 	.END					; I'm done
