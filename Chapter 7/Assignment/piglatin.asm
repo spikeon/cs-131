@@ -5,7 +5,7 @@
 ; File: 	piglatin.asm
 ; Description:	Convert user input to piglatin
 ; 
-; Authors:	Mike Flynn, Cory Upham
+; Authors:	Mike Flynn, Cory Upham, Jose Carlos Sagrero
 ; Project:	CS 131 Assignment 7
 ; Date: 	10/31/2017
 ; 
