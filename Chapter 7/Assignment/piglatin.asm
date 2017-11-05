@@ -49,13 +49,13 @@
 
 MAIN						; Load Values	
 	LEA R1, BUFFER				; - Load Buffer
-	LEA R3, SIZE				; - Load Size
-
+	LD R3, SIZE				; - Load Size
+	
 RESET						; Reset Buffer
 	STR R2, R1, #0 				; - Set current location to null
 	ADD R1, R1, #1 				; - Increment location
 	ADD R3, R3, #-1				; - Decrement size 
-	BRzp RESET 
+	BRp RESET 
 						; Display Prompt
 	LEA R0, PROMPT				; - Load Prompt 
 	PUTS					; - Output Prompt
@@ -83,9 +83,18 @@ RESPONSE					; Display Response Prefix
 	PUTS					; - Output Response Prefix
 
 						; Display all but the first character
-	LEA R0, BUFFER				; - Load Buffer into output
-	ADD R0, R0, #1				; - Change Buffer Index to 1
-	PUTS					; - Output rest of Buffer
+	LEA R1, BUFFER				; - Load Buffer
+	ADD R1, R1, #1				; - Change Buffer Index to 1
+	LD R3, SIZE				; - Load Size
+	ADD R3, R3, #-1				; 
+	
+DISPLAY						; Reset Buffer
+	LDR R0, R1, #0 				; - Load value at location into R0
+	OUT					; - Output
+	ADD R1, R1, #1 				; - Increment location
+	ADD R3, R3, #-1				; - Decrement size 
+	BRp DISPLAY 
+
 
 						; Forget all but the first character
 	LEA R1, BUFFER				; - Load Buffer for modification
@@ -113,5 +122,4 @@ AFFIX	.STRINGZ	"ay\n"			; Response Affix
 
 SIZE	.FILL		20			; Buffer Size
 BUFFER	.BLKW		20			; Input Buffer
-
 	.END					; I'm done

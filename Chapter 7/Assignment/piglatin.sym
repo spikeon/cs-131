@@ -1,11 +1,12 @@
 //Symbol Name		Page Address
 //----------------	------------
-//	AFFIX                   3041
-//	BUFFER                  3046
+//	AFFIX                   3047
+//	BUFFER                  304C
+//	DISPLAY                 301F
 //	MAIN                    3001
-//	PROMPT                  3026
+//	PROMPT                  302C
 //	RESET                   3003
-//	RESPON                  3035
+//	RESPON                  303B
 //	RESPONSE                3018
-//	SIZE                    3045
+//	SIZE                    304B
 //	USERINPUT               300B
