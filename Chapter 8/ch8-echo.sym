@@ -1,0 +1,9 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	DDR                     300A
+//	DSR                     3009
+//	ECHO                    3003
+//	KBDR                    3008
+//	KBSR                    3007
+//	NEXT                    300B
+//	START                   3000
