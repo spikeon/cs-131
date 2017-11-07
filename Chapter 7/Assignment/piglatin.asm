@@ -83,18 +83,9 @@ RESPONSE					; Display Response Prefix
 	PUTS					; - Output Response Prefix
 
 						; Display all but the first character
-	LEA R1, BUFFER				; - Load Buffer
-	ADD R1, R1, #1				; - Change Buffer Index to 1
-	LD R3, SIZE				; - Load Size
-	ADD R3, R3, #-1				; 
-	
-DISPLAY						; Reset Buffer
-	LDR R0, R1, #0 				; - Load value at location into R0
-	OUT					; - Output
-	ADD R1, R1, #1 				; - Increment location
-	ADD R3, R3, #-1				; - Decrement size 
-	BRp DISPLAY 
-
+	LEA R0, BUFFER				; - Load Buffer into output
+	ADD R0, R0, #1				; - Change Buffer Index to 1
+	PUTS					; - Output rest of Buffer
 
 						; Forget all but the first character
 	LEA R1, BUFFER				; - Load Buffer for modification
@@ -121,5 +112,5 @@ RESPON	.STRINGZ	"Pig-Latin: "		; Response Prefix
 AFFIX	.STRINGZ	"ay\n"			; Response Affix
 
 SIZE	.FILL		20			; Buffer Size
-BUFFER	.BLKW		20			; Input Buffer
+BUFFER	.BLKW		21			; Input Buffer
 	.END					; I'm done
