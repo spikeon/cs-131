@@ -1,0 +1,24 @@
+//Symbol Name		Page Address
+//----------------	------------
+//	ACTION                  3059
+//	BUFFER                  30CC
+//	CRYPTO                  30B3
+//	DCRYPTO                 30BA
+//	DECRYPT                 3038
+//	ECRYPTO                 30BB
+//	ENCRYPT                 3033
+//	ENDCRYPTO               30BC
+//	FIN                     30BF
+//	KEY                     305A
+//	MAIN                    3001
+//	PROMPTA                 3008
+//	PROMPTB                 303D
+//	PROMPTC                 306B
+//	RESET                   3003
+//	RESPON                  30C2
+//	RESPONSE                30AF
+//	SIZE                    30CB
+//	USERINPUTA              3024
+//	USERINPUTB              305B
+//	USERINPUTC              309E
+//	USERINPUTCI             30A2
