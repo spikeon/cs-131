@@ -156,6 +156,7 @@ USERINPUTCI
 	BRnzp USERINPUTCI				
 
 RESPONSE					; Display Response Prefix
+	STR R2, R1, #0
 	PUTC					; - Display Last Character ( always enter )
 	LEA R0, RESPON				; - Load Response Prefix
 	PUTS					; - Output Response Prefix
@@ -164,15 +165,6 @@ RESPONSE					; Display Response Prefix
 CRYPTO
 	LDR R0, R1, #0 
 	BRz FIN
-
-	; Flip the bit
-	
-	AND R2, R0, X0001
-	BRp ODD
-	BRz EVEN
-ODD	ADD R0, R0, #-1
-	BRnzp DOACTION
-EVEN	ADD R0, R0, #1
 	
 DOACTION
 	LD R4, ACTION
@@ -184,8 +176,24 @@ DCRYPTO
 	NOT R3, R3
 	ADD R3, R3, #1
 	ADD R0, R0, R3
+
+	AND R2, R0, X0001
+	BRp DODD
+	BRz DEVEN
+DODD	ADD R0, R0, #-1
+	BRnzp DENDFLIP
+DEVEN	ADD R0, R0, #1
+DENDFLIP
+
 	BRnzp ENDCRYPTO
 ECRYPTO
+	AND R2, R0, X0001
+	BRp EODD
+	BRz EEVEN
+EODD	ADD R0, R0, #-1
+	BRnzp EENDFLIP
+EEVEN	ADD R0, R0, #1
+EENDFLIP
 	LD R3, KEY
 	ADD R0, R0, R3
 	BRnzp ENDCRYPTO
