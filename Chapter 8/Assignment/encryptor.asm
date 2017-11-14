@@ -51,10 +51,9 @@
 ; -----------------------------------------------------------------------------------------
 
 	.ORIG x3000				; Begin Program at x3000
-	AND R2, R2, #0				; Make absolutely sure R2 is empty
-
 
 MAIN						; Load Values	
+	AND R2, R2, #0				; Make absolutely sure R2 is empty
 	LEA R1, BUFFER				; - Load Buffer
 	LD R3, SIZE				; - Load Size
 	
@@ -64,10 +63,8 @@ RESET						; Reset Buffer
 	ADD R3, R3, #-1				; - Decrement size 
 	BRp RESET 
 						; Display Prompt
-
 	BRnzp USERINPUTA
 
-PROMPTA	.STRINGZ	"\nEnter E)ncrypt or D)ecrypt"	; Input Prompt
 
 USERINPUTA					
 	LEA R0, PROMPTA				; - Load Prompt 
@@ -99,9 +96,6 @@ DECRYPT
 	STR R0, R1, #0				 
 	BRnzp USERINPUTB
 
-PROMPTB .STRINGZ	"\nEnter Encryption Key (1-9)"
-ACTION	.FILL		x0000			; 1 if encrypt, -1 if decrypt, 0 if not set
-KEY	.FILL		x0000			; Encryption Key, 0 if not set, positive if set
 
 USERINPUTB					
 	LEA R0, PROMPTB				; - Load Prompt 
@@ -122,7 +116,6 @@ USERINPUTB
 
 	BRnzp USERINPUTC
 
-PROMPTC	.STRINGZ	"\nEnter Message (<20 char, press <ENTER> when done)"
 
 USERINPUTC					
 	LEA R0, PROMPTC				; - Load Prompt 
@@ -142,6 +135,20 @@ USERINPUTCI
 	ADD R4, R5, #-10			; -- Only allow 20 characters
 	ADD R4, R4, #-10			
 	BRzp USERINPUTCI
+
+	LD R4, MIN
+	NOT R4, R4
+	ADD R4, R4, 1
+	ADD R4, R0, R4
+	BRn USERINPUTCI
+
+	LD R4, MAX
+	NOT R4, R4
+	ADD R4, R4, 1
+	ADD R4, R0, R4
+	BRp USERINPUTCI
+	
+
 	PUTC					; - Display value on the screen
 	STR R0, R1, #0				; - Store character in buffer
 	ADD R1, R1, #1				; - Increment buffer index
@@ -155,31 +162,39 @@ RESPONSE					; Display Response Prefix
 
 	LEA R1, BUFFER
 CRYPTO
-	LDR R0, R1, #0 ; Not working
+	LDR R0, R1, #0 
 	BRz FIN
-	LD R3, KEY
-	LD R4, ACTION
 
 	; Flip the bit
 	
-	; If bit is odd, minus 1
-	; If bit is even, add 1
-
-	BRn DCRYPTO
-	BRp ECRYPTO
+	AND R2, R0, X0001
+	BRp ODD
+	BRz EVEN
+ODD	ADD R0, R0, #-1
+	BRnzp DOACTION
+EVEN	ADD R0, R0, #1
+	
+DOACTION
+	LD R4, ACTION
+	BRn ECRYPTO
+	BRp DCRYPTO
 	BRz MAIN ; ERROR
 DCRYPTO
-	; Subtract Key
+	LD R3, KEY
+	NOT R3, R3
+	ADD R3, R3, #1
+	ADD R0, R0, R3
 	BRnzp ENDCRYPTO
 ECRYPTO
-	; Add Key
+	LD R3, KEY
+	ADD R0, R0, R3
 	BRnzp ENDCRYPTO
 ENDCRYPTO
 	STR R0, R1, #0 
 	ADD R1, R1, #1
 	BRnzp CRYPTO
 FIN		
-
+	LEA R0, BUFFER
 	PUTS
 
 BRnzp	MAIN					
@@ -189,7 +204,20 @@ BRnzp	MAIN
 ; -----------------------------------------------------------------------------------------
 ; Variables
 ; -----------------------------------------------------------------------------------------
-RESPON	.STRINGZ	"Result: "		; Response Prefix
+PROMPTA	.STRINGZ	"\nEnter E)ncrypt or D)ecrypt\n"	; Input Prompt
+PROMPTC	.STRINGZ	"\nEnter Message (<20 char, press <ENTER> when done)\n"
+PROMPTB .STRINGZ	"\nEnter Encryption Key (1-9)\n"
+ACTION	.FILL		x0000			; 1 if encrypt, -1 if decrypt, 0 if not set
+KEY	.FILL		x0000			; Encryption Key, 0 if not set, positive if set
+
+MIN	.FILL		x0020
+MAX	.FILL		x005A
+
+; MINEKEY	.FILL		x0040
+
+
+
+RESPON	.STRINGZ	"\nResult: "		; Response Prefix
 SIZE	.FILL		20			; Buffer Size
 BUFFER	.BLKW		21			; Input Buffer
 	.END					; I'm done
