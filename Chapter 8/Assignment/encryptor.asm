@@ -7,7 +7,7 @@
 ; 
 ; Authors:	Mike Flynn, Cory Upham, Jose Carlos Sagrero
 ; Project:	CS 131 Assignment 8
-; Date: 	11/08/2017
+; Date: 	11/20/2017
 ; 
 ; -----------------------------------------------------------------------------------------
 ; Resource Usage:
@@ -44,33 +44,35 @@
 ; 9 ) Get input from user and store as index 0-19 until we receive the enter character (x0A)
 ; 10) Encrypt or Decrypt
 ; 11) Display Result
-; 12) Loop back to the beginning
+; 12) Loop forever
 ;
 ; -----------------------------------------------------------------------------------------
 ; Code
 ; -----------------------------------------------------------------------------------------
 
-	.ORIG x3000				; Begin Program at x3000
+	.ORIG x3000				
+MAIN						
+; Make sure R2 is zero
 
-MAIN						; Load Values	
-	AND R2, R2, #0				; Make absolutely sure R2 is empty
-	LEA R1, BUFFER				; - Load Buffer
-	LD R3, SIZE				; - Load Size
-	
-RESET						; Reset Buffer
-	STR R2, R1, #0 				; - Set current location to null
-	ADD R1, R1, #1 				; - Increment location
-	ADD R3, R3, #-1				; - Decrement size 
+	AND R2, R2, #0				
+
+; Reset Buffer
+
+	LEA R1, BUFFER				
+	LD R3, SIZE					
+RESET						
+	STR R2, R1, #0 				
+	ADD R1, R1, #1 				
+	ADD R3, R3, #-1				
 	BRp RESET 
-						; Display Prompt
 	BRnzp USERINPUTA
 
+; Get Encrypt or Decrypt, store for later
 
 USERINPUTA					
-	LEA R0, PROMPTA				; - Load Prompt 
-	PUTS					; - Output Prompt
-
-	GETC					; - Load character from keyboard
+	LEA R0, PROMPTA				
+	PUTS					
+	GETC					
 	PUTC
 	ADD R4, R0, #-10			
 	ADD R4, R4, #-10			
@@ -96,10 +98,11 @@ DECRYPT
 	STR R0, R1, #0				 
 	BRnzp USERINPUTB
 
+; Get Key, store for later
 
 USERINPUTB					
-	LEA R0, PROMPTB				; - Load Prompt 
-	PUTS					; - Output Prompt
+	LEA R0, PROMPTB				
+	PUTS					
 	GETC
 	PUTC
 	ADD R4, R0, #-10
@@ -116,23 +119,23 @@ USERINPUTB
 
 	BRnzp USERINPUTC
 
+; Get string
 
 USERINPUTC					
-	LEA R0, PROMPTC				; - Load Prompt 
-	PUTS					; - Output Prompt
+	LEA R0, PROMPTC				
+	PUTS					
 	LEA R1, BUFFER				
-	AND R5, R5, #0				; - Set Character Counter to zero
+	AND R5, R5, #0				
 
 USERINPUTCI
-						; Get User Input
 
-	GETC					; - Load character from keyboard
-	ADD R4, R0, #-10			; - Excape loop on newline
+	GETC					
+	ADD R4, R0, #-10			
 	BRz RESPONSE				 
-						; - Validate Input
-	ADD R4, R0, #-8				; -- Ignore backspace
+						
+	ADD R4, R0, #-8				
 	BRz USERINPUTCI				 
-	ADD R4, R5, #-10			; -- Only allow 20 characters
+	ADD R4, R5, #-10			
 	ADD R4, R4, #-10			
 	BRzp USERINPUTCI
 
@@ -149,29 +152,34 @@ USERINPUTCI
 	BRp USERINPUTCI
 	
 
-	PUTC					; - Display value on the screen
-	STR R0, R1, #0				; - Store character in buffer
-	ADD R1, R1, #1				; - Increment buffer index
-	ADD R5, R5, #1				; - Increment Character Counter
+	PUTC					
+	STR R0, R1, #0				
+	ADD R1, R1, #1				
+	ADD R5, R5, #1				
 	BRnzp USERINPUTCI				
 
-RESPONSE					; Display Response Prefix
+; Begin Response
+
+RESPONSE					
 	STR R2, R1, #0
-	PUTC					; - Display Last Character ( always enter )
-	LEA R0, RESPON				; - Load Response Prefix
-	PUTS					; - Output Response Prefix
+	PUTC					
+	LEA R0, RESPON				
+	PUTS					
 
 	LEA R1, BUFFER
 CRYPTO
+	; Load next character, if null we're done
 	LDR R0, R1, #0 
 	BRz FIN
 	
 DOACTION
+	; Load Encrypt or Decrypt
 	LD R4, ACTION
 	BRn ECRYPTO
 	BRp DCRYPTO
 	BRz MAIN ; ERROR
 DCRYPTO
+	; Do Decrypt
 	LD R3, KEY
 	NOT R3, R3
 	ADD R3, R3, #1
@@ -187,6 +195,7 @@ DENDFLIP
 
 	BRnzp ENDCRYPTO
 ECRYPTO
+	; Do Encrypt
 	AND R2, R0, X0001
 	BRp EODD
 	BRz EEVEN
@@ -205,6 +214,8 @@ FIN
 	LEA R0, BUFFER
 	PUTS
 
+; Loop Forever
+
 BRnzp	MAIN					
 
 	HALT
@@ -219,7 +230,7 @@ ACTION	.FILL		x0000			; 1 if encrypt, -1 if decrypt, 0 if not set
 KEY	.FILL		x0000			; Encryption Key, 0 if not set, positive if set
 
 MIN	.FILL		x0020
-MAX	.FILL		x005A
+MAX	.FILL		x0060
 
 ; MINEKEY	.FILL		x0040
 
