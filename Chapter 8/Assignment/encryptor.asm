@@ -52,35 +52,25 @@
 
 	.ORIG x3000				
 MAIN						
+
 ; Make sure R2 is zero
 
 	AND R2, R2, #0				
 
-; Reset Buffer
-
-	LEA R1, BUFFER				
-	LD R3, SIZE					
-RESET						
-	STR R2, R1, #0 				
-	ADD R1, R1, #1 				
-	ADD R3, R3, #-1				
-	BRp RESET 
 	BRnzp USERINPUTA
 
 ; Get Encrypt or Decrypt, store for later
+
+PROMPTA	.STRINGZ	"\nEnter E)ncrypt or D)ecrypt\n"	; Input Prompt
+ECHAR .FILL #-68
 
 USERINPUTA					
 	LEA R0, PROMPTA				
 	PUTS					
 	GETC					
 	PUTC
-	ADD R4, R0, #-10			
-	ADD R4, R4, #-10			
-	ADD R4, R4, #-10			
-	ADD R4, R4, #-10			
-	ADD R4, R4, #-10			
-	ADD R4, R4, #-10			
-	ADD R4, R4, #-8			
+	LD R4, ECHAR
+	ADD R4, R4, R0
 	BRz ENCRYPT
 	ADD R4, R4, #-1
 	BRz DECRYPT
@@ -99,17 +89,16 @@ DECRYPT
 	BRnzp USERINPUTB
 
 ; Get Key, store for later
+PROMPTB .STRINGZ	"\nEnter Encryption Key (1-9)\n"
+KCHAR	.FILL #-48
 
 USERINPUTB					
 	LEA R0, PROMPTB				
 	PUTS					
 	GETC
 	PUTC
-	ADD R4, R0, #-10
-	ADD R4, R4, #-10
-	ADD R4, R4, #-10
-	ADD R4, R4, #-10
-	ADD R4, R4, #-8
+	LD R4, KCHAR
+	ADD R4, R4, R0
 	BRnz USERINPUTB
 	ADD R4, R4, #-10
 	BRzp USERINPUTB
@@ -120,6 +109,7 @@ USERINPUTB
 	BRnzp USERINPUTC
 
 ; Get string
+PROMPTC	.STRINGZ	"\nEnter Message (<20 char, press <ENTER> when done)\n"
 
 USERINPUTC					
 	LEA R0, PROMPTC				
@@ -159,6 +149,10 @@ USERINPUTCI
 	BRnzp USERINPUTCI				
 
 ; Begin Response
+
+MIN	.FILL		x0020
+MAX	.FILL		x0060
+RESPON	.STRINGZ	"\nResult: "		; Response Prefix
 
 RESPONSE					
 	STR R2, R1, #0
@@ -220,23 +214,8 @@ BRnzp	MAIN
 
 	HALT
 
-; -----------------------------------------------------------------------------------------
-; Variables
-; -----------------------------------------------------------------------------------------
-PROMPTA	.STRINGZ	"\nEnter E)ncrypt or D)ecrypt\n"	; Input Prompt
-PROMPTC	.STRINGZ	"\nEnter Message (<20 char, press <ENTER> when done)\n"
-PROMPTB .STRINGZ	"\nEnter Encryption Key (1-9)\n"
 ACTION	.FILL		x0000			; 1 if encrypt, -1 if decrypt, 0 if not set
 KEY	.FILL		x0000			; Encryption Key, 0 if not set, positive if set
-
-MIN	.FILL		x0020
-MAX	.FILL		x0060
-
-; MINEKEY	.FILL		x0040
-
-
-
-RESPON	.STRINGZ	"\nResult: "		; Response Prefix
 SIZE	.FILL		20			; Buffer Size
 BUFFER	.BLKW		21			; Input Buffer
 	.END					; I'm done
