@@ -601,97 +601,65 @@ DRAWBOARD
 
 ; Store R0, R2, R7
 		ST R0, GI_R0
+		ST R2, GI_R2
 		ST R7, GI_R7
 
 ; Print out each row
 
+		LEA R2, PRINTLN
 
 		LD R0, ROW1_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW2_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW3_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW4_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW5_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW6_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW7_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW8_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW9_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		JSRR R2
 
 		LD R0, ROW10_ADDR
+		JSRR R2
 
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
-
-		LD R0, ROW11_ADDR
-
-		PUTS
-		AND R0, R0, #0
-		ADD R0, R0, x000A
-		PUTC
+		LD R0, ROW11_ADDR		
+		JSRR R2
 
 
 ; Restore R0, R2, R7
 
 		LD R0, GI_R0
+		LD R2, GI_R2
 		LD R7, GI_R7
 
 		RET
 
+NL_R7	.BLKW	1
 
+PRINTLN
+		ST R7, NL_R7
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC	
+		LD R7, NL_R7
+		RET
 
 ;
 ; ********************* End User Code ****************************
