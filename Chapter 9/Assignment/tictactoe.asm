@@ -487,7 +487,13 @@ GI_LOOP		LD 	R2, GETPLAYER_ADDR
 ;   Get User Input
 
 		GETC 
+		PUTC
 		ADD R1, R0, #0
+
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		
+		PUTC 
 
 ; ********************* End User Code ****************************
 ;-----------------------------------------------------------------
@@ -593,7 +599,98 @@ DRAWBOARD
 ; ******************** Start User Code ***************************
 ;
 
+; Store R0, R2, R7
+		ST R0, GI_R0
+		ST R7, GI_R7
+
+; Print out each row
+
+
+		LD R0, ROW1_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW2_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW3_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW4_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW5_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW6_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW7_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW8_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW9_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW10_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+		LD R0, ROW11_ADDR
+
+		PUTS
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC 
+
+
+; Restore R0, R2, R7
+
+		LD R0, GI_R0
+		LD R7, GI_R7
+
 		RET
+
 ;
 ; ********************* End User Code ****************************
 ;-----------------------------------------------------------------
@@ -610,7 +707,61 @@ PRINTOUTCOME
 ; ******************** Start User Code ***************************
 ;
 
+; Store R4
+		ST R0, GI_R0
+		ST R4, GI_R4
+		ST R7, GI_R7
+
+
+; Print Outcome
+O_X		LD R4, OC_CHECK_X
+		ADD R4, R4, R1
+		BRnp O_O
+		LEA R0, OC_X
+		PUTS
+		BR O_END
+
+O_O		LD R4 OC_CHECK_O
+		ADD R4, R4, R1
+		BRnp O_CAT
+		LEA R0, OC_O
+		PUTS
+		BR O_END
+
+O_CAT		LD R4 OC_CHECK_CAT
+		ADD R4, R4, R1
+		BRnp O_END
+		LEA R0, OC_CAT
+		PUTS
+		BR O_END
+
+O_END
+; New Line
+		AND R0, R0, #0
+		ADD R0, R0, x000A
+		PUTC
+		
+; Restore R4
+		LD R0, GI_R0
+		LD R4, GI_R4
+		LD R7, GI_R7
+
+
+
+
+		
+
 		RET
+
+OC_CHECK_X	.FILL	x-1
+OC_CHECK_O	.FILL	x-2
+OC_CHECK_CAT	.FILL	x-3
+
+OC_X 		.STRINGZ "X wins"
+OC_O 		.STRINGZ "O wins"
+OC_CAT		.STRINGZ "Cat Game"
+
+
 ;
 ; ********************* End User Code ****************************
 		.END
