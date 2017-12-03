@@ -478,7 +478,14 @@ GI_LOOP		LD 	R2, GETPLAYER_ADDR
 ;   Add code to display user prompt (including the 'X' / 'O')
 ;   The entered character should be in R1 by the end of this code block.
 ;
-;
+;   Display User Prompt
+
+PUTC
+LEA R0, GI_USERPROMPT
+PUTS
+
+;   Get User Input
+
 ; ********************* End User Code ****************************
 ;-----------------------------------------------------------------
 ; Validate input:  must be 1 - 9 or 'q' or 'x'
@@ -490,6 +497,9 @@ GI_LOOP		LD 	R2, GETPLAYER_ADDR
 ; ******************** Start User Code ***************************
 ;   Add code to validate the ASCII character in R1.
 ;   If character is 'q' or 'x', branch to GI_DONE.
+
+;   Check for q
+
 ;   If character is invalid, branch to GI_INVALID.
 ;   Once character is validated (i.e., is between 1 - 9 inclusive),
 ;     either just drop through or branch to GI_CHK_SQUARE.
@@ -498,8 +508,8 @@ GI_LOOP		LD 	R2, GETPLAYER_ADDR
 ;	THE FOLLOWING CODE FORCES THE PROGRAM TO EXIT.
 ;       REMOVE CODE ONCE YOU HAVE THE ABOVE CODE BLOCK
 ;	AND THIS CODE BLOCK WORKING PROPERLY.
-		LD	R1, GI_ASCII_x
-		BR 	GI_DONE		; character 
+;		LD	R1, GI_ASCII_x
+;		BR 	GI_DONE		; character 
 ;
 ; ********************* End User Code ****************************
 ;-----------------------------------------------------------------
