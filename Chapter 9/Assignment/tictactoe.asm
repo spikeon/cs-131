@@ -480,14 +480,14 @@ GI_LOOP		LD 	R2, GETPLAYER_ADDR
 ;
 ;   Display User Prompt
 
-PUTC
-LEA R0, GI_USERPROMPT
-PUTS
+		PUTC
+		LEA R0, GI_USERPROMPT
+		PUTS
 
 ;   Get User Input
 
-GETC 
-ADD R1, R0, #0
+		GETC 
+		ADD R1, R0, #0
 
 ; ********************* End User Code ****************************
 ;-----------------------------------------------------------------
@@ -500,20 +500,35 @@ ADD R1, R0, #0
 ; ******************** Start User Code ***************************
 ;   Add code to validate the ASCII character in R1.
 ;   If character is 'q' or 'x', branch to GI_DONE.
-
-;   Check for q
-
 ;   If character is invalid, branch to GI_INVALID.
 ;   Once character is validated (i.e., is between 1 - 9 inclusive),
 ;     either just drop through or branch to GI_CHK_SQUARE.
 ;   Hint: rememeber the Encryption Key range check in Encryptor assignment.
-;
-;	THE FOLLOWING CODE FORCES THE PROGRAM TO EXIT.
-;       REMOVE CODE ONCE YOU HAVE THE ABOVE CODE BLOCK
-;	AND THIS CODE BLOCK WORKING PROPERLY.
-;		LD	R1, GI_ASCII_x
-;		BR 	GI_DONE		; character 
-;
+
+;   Check for q
+
+		LD R4, GI_NEG_ASCII_q
+		ADD R4, R4, R1
+		BRz GI_DONE
+
+;   Check for x
+
+		LD R4, GI_NEG_ASCII_x
+		ADD R4, R4, R1
+		BRz GI_DONE	
+
+;   Check for less than 1  
+
+		LD R4, GI_NEG_ASCII_1
+		ADD R4, R4, R1
+		BRn GI_INVALID
+
+;   Check for greater than 9  
+
+		LD R4, GI_NEG_ASCII_9
+		ADD R4, R4, R1
+		BRp GI_INVALID
+
 ; ********************* End User Code ****************************
 ;-----------------------------------------------------------------
 ; Check if selected square ia already occupied
