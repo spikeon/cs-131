@@ -73,11 +73,11 @@
 //	NEWLINE                 30ED
 //	NEW_LINE                31FF
 //	NL_R7                   32B2
-//	OC_CAT                  32E7
+//	OC_CAT                  32E9
 //	OC_CHECK_CAT            32D8
 //	OC_CHECK_O              32D7
 //	OC_CHECK_X              32D6
-//	OC_O                    32E0
+//	OC_O                    32E1
 //	OC_X                    32D9
 //	O_CAT                   32C9
 //	O_END                   32CF

@@ -722,9 +722,9 @@ OC_CHECK_X	.FILL	x-1
 OC_CHECK_O	.FILL	x-2
 OC_CHECK_CAT	.FILL	x-3
 
-OC_X 		.STRINGZ "X wins"
-OC_O 		.STRINGZ "O wins"
-OC_CAT		.STRINGZ "Cat Game"
+OC_X 		.STRINGZ "X wins!"
+OC_O 		.STRINGZ "O wins!"
+OC_CAT		.STRINGZ "Cat Game!"
 
 
 ;
